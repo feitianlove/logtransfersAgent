@@ -23,7 +23,7 @@ func GetAllFile(pwd string) ([]string, error) {
 	for i := range fileInfoList {
 		//fmt.Println(fileInfoList[i].Name()) //打印当前文件或目录下的文件或目录名
 		fileName := fileInfoList[i].Name()
-		if !strings.HasPrefix(fileName, ".") && strings.HasSuffix(fileName, ".mod") {
+		if !strings.HasPrefix(fileName, ".") {
 			fmt.Println(path.Join(pwd, fileName))
 			result = append(result, path.Join(pwd, fileName))
 		}
@@ -36,7 +36,7 @@ func RecursionGetAllFile(pwd string) ([]string, error) {
 	result := make([]string, 0)
 	err := filepath.Walk(pwd, func(dir string, info os.FileInfo, err error) error {
 		fileName := info.Name()
-		if !strings.HasPrefix(fileName, ".") && strings.HasSuffix(fileName, ".log") {
+		if !strings.HasPrefix(fileName, ".") && dir != pwd {
 			result = append(result, dir)
 		}
 		return nil

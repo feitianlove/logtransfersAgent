@@ -15,6 +15,7 @@ type Config struct {
 }
 type KafkaConfig struct {
 	Address string
+	Topic   string
 }
 
 type TailFConfig struct {
@@ -25,6 +26,7 @@ func DefaultConfig() *Config {
 	return &Config{
 		Kafka: &KafkaConfig{
 			Address: "127.0.0.1:9290",
+			Topic:   "logtransfersAgent_one",
 		},
 		CtrlLog: &logger.LogConf{
 			LogLevel:      "info",

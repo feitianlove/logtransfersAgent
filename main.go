@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	golibKafak "github.com/feitianlove/golib/kafka"
 	"github.com/feitianlove/logtransfersAgent/config"
 	"github.com/feitianlove/logtransfersAgent/kafka"
@@ -9,8 +10,12 @@ import (
 	"sync"
 )
 
+var (
+	wg sync.WaitGroup
+)
+
 func main() {
-	var wg sync.WaitGroup
+
 	// 初始化config
 	cfg, err := config.NewConfig("../etc/logtransferAgent.conf")
 	if err != nil {
@@ -24,7 +29,7 @@ func main() {
 	//初始化kafka
 	kafkaProduct, err := kafka.InitProduct(golibKafak.Kafka{ServerAddr: cfg.Kafka.Address})
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 	//初始化tailf
 	wg.Add(1)

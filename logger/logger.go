@@ -28,12 +28,12 @@ func InitConsoleLog(conf *goliblogger.LogConf) error {
 	if err != nil {
 		return err
 	}
-	Ctrl = logger
+	Console = logger
 	return nil
 }
 
 func InitLog(cfg *config.Config) error {
-	if err := InitConsoleLog(cfg.CtrlLog); err != nil {
+	if err := InitConsoleLog(cfg.ConsoleLog); err != nil {
 		return err
 	}
 	if err := InitCtrlLog(cfg.CtrlLog); err != nil {
