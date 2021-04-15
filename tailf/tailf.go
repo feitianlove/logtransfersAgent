@@ -165,7 +165,9 @@ func LeastRecently() {
 	defer Lock.Unlock()
 	timeFormat := "2006-01-02 15:04:05"
 	reg := regexp.MustCompile(`log\.(.*)\.log`)
+	var deleteFileList []string
 	for _, fileName := range FileNameMap {
+
 		res := reg.FindStringSubmatch(fileName)
 		var fileExpireTime int64
 		if len(res) > 0 && len(res[1]) == 12 {
@@ -173,10 +175,18 @@ func LeastRecently() {
 			temp := t[:4] + "-" + t[4:6] + "-" + t[6:8] + " " + t[8:10] + ":" + t[10:12] + ":" + "00"
 			fileTime, _ := time.Parse(timeFormat, temp)
 			fileExpireTime = fileTime.Add(24 * time.Hour).Unix()
+		} else {
+			continue
 		}
 		lruTime := time.Now().Unix()
 		if fileExpireTime < lruTime {
+			deleteFileList = append(res, fileName)
 			delete(FileNameMap, fileName)
 		}
+	}
+	for _, item := range deleteFileList {
+		logger.Ctrl.WithFields(logrus.Fields{
+			"LeastRecently": item,
+		}).Info("expire file")
 	}
 }
